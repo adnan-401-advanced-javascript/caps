@@ -1,6 +1,6 @@
 const eventEmitter = require("./events");
 
-eventEmitter.on("pickup", (payload) => {
+const pickupHandler = (payload) => {
   setTimeout(() => {
     console.log(`DRIVER: picked up ${payload.orderId}`);
     eventEmitter.emit("in-transit", payload);
@@ -10,4 +10,8 @@ eventEmitter.on("pickup", (payload) => {
     console.log(`DRIVER: delivered up ${payload.orderId}`);
     eventEmitter.emit("delivered", payload);
   }, 3000);
-});
+};
+
+eventEmitter.on("pickup", pickupHandler);
+
+module.exports.pickupHandler = pickupHandler;

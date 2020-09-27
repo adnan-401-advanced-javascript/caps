@@ -6,6 +6,9 @@ setInterval(() => {
   eventEmitter.emit("pickup", order);
 }, 5000);
 
-eventEmitter.on("delivered", (payload) => {
+const deliveredHandler = (payload) => {
   console.log(`VENDOR: Thank you for delivering ${payload.orderId}`);
-});
+};
+eventEmitter.on("delivered", deliveredHandler);
+
+module.exports.deliveredHandler = deliveredHandler;
