@@ -1,11 +1,11 @@
 {
-  "name": "caps",
+  "name": "driver",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "driver.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node driver.js",
+    "dev": "nodemon driver.js",
     "lint": "eslint './**/*.js' --ignore-pattern node_modules/",
     "test": "jest --verbose --coverage"
   },
@@ -27,7 +27,6 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "faker": "^5.1.0",
     "jest": "^26.4.2"
   }
 }
