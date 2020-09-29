@@ -1,55 +1,43 @@
-/* eslint-disable no-use-before-define */
-const net = require("net");
+const http = require("http");
 
-const server = net.createServer();
+const server = http.createServer();
+
+const io = require("socket.io")(server);
+
+const caps = io.of("/caps");
 
 const port = process.env.PORT || 4000;
 
 server.listen(port, () => console.log(`server is running on ${port}`));
 
-const socketPool = {};
+const {
+  joinHandler, pickupHandler, inTransitHandler, deliveredHandler,
+} = require("./socketHandler");
 
-function broadcast(msg) {
-  /* eslint-disable-next-line */
-  for (let id in socketPool) {
-    socketPool[id].write(msg);
-  }
-}
+caps.on("connection", (socket) => {
+  console.log("user is online!!!", socket.id);
 
-server.on("connection", (socket) => {
-  console.log("user is online!!!");
-  const id = `Socket-${Math.random() * 100}`;
-  console.log("id >>>>>>> ", id);
-  socketPool[id] = socket;
-  socket.on("data", dataHandler);
+  socket.on("join", (payload) => {
+    joinHandler(socket, payload);
+  });
+
+  socket.on("pickup", (payload) => {
+    pickupHandler(socket, payload);
+  });
+
+  socket.on("in-transit", (payload) => {
+    inTransitHandler(socket, payload);
+  });
+
+  socket.on("delivered", (payload) => {
+    deliveredHandler(socket, payload);
+  });
 
   socket.on("error", (e) => {
     console.log("ERROR !!!!!!! ", e.message);
   });
 
-  socket.on("close", () => {
-    delete socketPool[id];
+  socket.on("close", (err) => {
+    console.log(socket.id, " closed ", err.message);
   });
 });
-
-const dataHandler = (buffer) => {
-  logEvent(buffer);
-  broadcast(buffer);
-};
-
-function logEvent(msgBuffer) {
-  console.log("calledlogEventlogEventlogEventlogEventlogEvent");
-  const { topic, payload } = JSON.parse(msgBuffer.toString());
-  console.log(`
-    EVENT { event: ${topic},
-      time: ${new Date().toISOString()},
-      payload:
-       { store: ${payload.storeName},
-         orderID: ${payload.orderId},
-         customer: ${payload.customerName},
-         address: ${payload.address} } }`);
-}
-
-module.exports.dataHandler = dataHandler;
-module.exports.logEvent = logEvent;
-module.exports.broadcast = broadcast;

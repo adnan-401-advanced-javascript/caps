@@ -1,4 +1,3 @@
-
 ### **.env**
 ```env
 STORE_NAME=adnan
