@@ -1,0 +1,21 @@
+{
+  "name": "caps",
+  "version": "1.0.0",
+  "dependencies": {
+    "jest": "^26.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest --verbose --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adnan-401-advanced-javascript/caps.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adnan-401-advanced-javascript/caps/issues"
+  },
+  "homepage": "https://github.com/adnan-401-advanced-javascript/caps#readme"
+}

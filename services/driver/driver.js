@@ -1,25 +1,19 @@
-/* eslint-disable no-use-before-define */
-const net = require("net");
-
-const dataHandler = require("./dataHandler");
-
-const client = new net.Socket();
+const io = require("socket.io-client");
 
 const host = process.env.HOST || "localhost";
 const port = process.env.PORT || 4000;
 
-client.connect(port, host, () => {
-  console.log("driver is connected to Server! ..");
+const socket = io(`http://${host}:${port}/caps`);
+
+const { pickupHandler } = require("./socketHandler");
+
+socket.on("connect", () => {
+  console.log("Driver is connected to Server! ..");
 });
 
-client.on("data", (data) => {
-  dataHandler(data, client);
+socket.on("pickup", (payLoad) => {
+  pickupHandler(socket, payLoad);
 });
-
-client.on("close", () => {
-  console.log("connection is closed!!");
-});
-
-client.on("error", (err) => {
-  console.log("error --------------------> ", err);
+socket.on("disconnect", () => {
+  console.log("driver is disconnected");
 });
